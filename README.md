@@ -15,6 +15,13 @@ It provides a set of APIs to directly add structured and leveled logging to your
 * Log file rotation - to avoid large log files
 * Buffered I/O - to improve performance
 
+## Architecture
+
+Data Collector uses composition to define a relationship between components. The public interfaces can be found in [App](pkg/app/app.go), [Transaction](pkg/app/transaction.go) and [Log](pkg/log/log_info.go). Embedded fields are used to hide the private implementation, but create an easy-to use approach to forward the calls.
+
+[UML Diagram](docs/uml_diagram.jpeg), [Log Flow](docs/log_flow.jpeg), [Transaction Flow](docs/transaction_flow.jpeg)
+
+
 
 ## Installation
 
