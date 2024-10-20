@@ -25,7 +25,7 @@ For the latest version of the library, Go 1.22+ is required.
 ### Getting started
 Follow these steps to instrument your application. Use the [Examples](examples) as a starting point.
 
-#### Step 1: Installation 
+**Step 1: Installation**
 
 Data Collector is a Go library. See dependencies in [go.mod](go.mod). Install the Data Collectorthe the same way you would install any other Go library. 
 The simplest way is to run:
@@ -39,9 +39,9 @@ Then import the package in your application:
 import "github.com/ralugr/datacollector"
 ```
 
-#### Step 2: Create an Application
+**Step 2: Create an Application**
 
-In your `main` function, or an `init` block, create an [Application](pkg/app/app.go/#NewDataCollector) using [Config](pkg/config/config.go).
+In your `main` function, or an `init` block, create a [NewDataCollector](pkg/app/app.go) using [Config](pkg/config/config.go).
 
 ```go
 func main() {
@@ -68,7 +68,7 @@ func main() {
 }
 ```
 
-#### Step 3: Add Logging
+**Step 3: Add Logging**
 Use the Debug, Info, Warning, Error methods from the Application instance to log messages.
 
 ```go
@@ -103,8 +103,8 @@ func main() {
 }
 ```
 
-#### Step 4: Add Transactions
-[Transactions](pkg/transaction/transaction.go) are a way to group several logs into a single unit of work.
+**Step 4: Add Transactions**
+[Transactions](pkg/app/transaction.go) are a way to group several logs into a single unit of work.
 
 ```go
 func main() {
@@ -163,10 +163,14 @@ Then it outputs the logs to the desired location.
 
 ### Default Drivers
 
-The data collector app comes with two default drivers: cli.Writer - for logging to the console and file.Writer - for logging to a file.
-These drivers support both plain text and JSON encoding. Their default encoding is plain text.
+The data collector app comes with two default drivers: 
+  * [cli.Writer](pkg/drivers/cli/writer.go) - for logging to the console
+  * [file.Writer](pkg/drivers/file/writer.go) - for logging to a file
+  
+These drivers support both plain text and JSON encoding through the `SetEncoding` function. 
+Their default encoding is plain text.
 
-#### CLI Driver Example
+**CLI Driver Example**
 
 ```go
 func main() {
@@ -196,7 +200,7 @@ func main() {
 }
 ```
 
-#### File Driver Example
+**File Driver Example**
 
 ```go
 func main() {
@@ -233,7 +237,7 @@ func main() {
 }
 ```
 
-#### Custom Driver Example
+**Custom Driver Example**
 
 ```go
 // Define a custom driver typw
