@@ -1,8 +1,11 @@
 package config
 
-import "github.com/ralugr/datacollector/pkg/log"
+import (
+	"fmt"
 
-// Config contains Application and Transaction behavior settings.
+	"github.com/ralugr/datacollector/pkg/log"
+)
+
 type Config struct {
 	AppName  string
 	LogLevel log.Level
@@ -14,13 +17,14 @@ type Config struct {
 
 type ConfigOption func(*Config)
 
-func ConfigAppName(appName string) ConfigOption {
+func AppName(appName string) ConfigOption {
 	return func(cfg *Config) { cfg.AppName = appName }
 }
 
-func ConfigLogLevel(logLevel log.Level) ConfigOption {
+func LogLevel(logLevel log.Level) ConfigOption {
 	return func(cfg *Config) {
 		if !validInput(logLevel) {
+			cfg.Error = fmt.Errorf("Invalid value: %v", logLevel)
 			return
 		}
 		cfg.LogLevel = logLevel
@@ -32,6 +36,7 @@ func DefaultConfig() Config {
 
 	c.AppName = "Test App"
 	c.LogLevel = log.DebugLevel
+	c.Error = nil
 
 	return c
 }

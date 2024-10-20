@@ -16,8 +16,8 @@ func main() {
 
 	app, err := app.NewDataCollector(
 		driver,
-		config.ConfigAppName("CLI JSON"),
-		config.ConfigLogLevel(log.DebugLevel),
+		config.AppName("CLI JSON"),
+		config.LogLevel(log.DebugLevel),
 	)
 	if err != nil {
 		fmt.Println(err)

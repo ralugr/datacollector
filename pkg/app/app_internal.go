@@ -1,7 +1,6 @@
 package app
 
 import (
-	"fmt"
 	"sync"
 	"time"
 
@@ -28,10 +27,8 @@ func (a *application) startTransaction(attributes ...log.Attrb) *Transaction {
 	return newTransaction(a.drv, a.config, attributes...)
 }
 
-// check log level
 func (a *application) log(level log.Level, msg string, attributes ...log.Attrb) {
 	if !log.IsValid(a.config.LogLevel, level) {
-		fmt.Printf("Log is not valid %v, %v", a.config.LogLevel, level)
 		return
 	}
 

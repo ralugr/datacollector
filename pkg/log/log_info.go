@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+// Entry represents a log entry containing metadata about a specific log event.
+// Includes json formatting
 type Entry struct {
 	Timestamp     time.Time `json:"timestamp"`
 	Level         Level     `json:"level"`
@@ -14,15 +16,18 @@ type Entry struct {
 	TransactionID string    `json:"transaction_id,omitempty"`
 }
 
+// Attrb represents a single key-value pair for log attributes.
 type Attrb struct {
 	Key   string
 	Value any
 }
 
-// Define the exported LogLevel type as a string
+// Level defines a custom type.
+// See constants below for available levels.
 type Level string
 
-// Exported constants for valid log levels
+// Predefined log levels for standard log severity.
+// Should be passed when creating a new data collector application.
 const (
 	DebugLevel Level = "DEBUG"
 	InfoLevel  Level = "INFO"
@@ -30,15 +35,21 @@ const (
 	ErrorLevel Level = "ERROR"
 )
 
+// A list of log levels in order of increasing severity.
+// This is used internally to compare log levels.
 var logLevels = []Level{DebugLevel, InfoLevel, WarnLevel, ErrorLevel}
 
-// Single function to create a log attribute
+// Attr creates a new key-value pair attribute for a log entry.
+// This function should be used to add attributes to logs and transactions.
 func Attr(key string, value any) Attrb {
 	return Attrb{Key: key, Value: value}
 }
 
-// make private
-// check how zap logger is implemented because it uses zapcore for fields and zap for logging
+// IsValid determines if a log entry's level is valid according to the application's logging configuration.
+// It compares the current log level with the application's configured log level.
 func IsValid(appLogLevel Level, currentLogLevel Level) bool {
-	return slices.Index(logLevels, currentLogLevel) >= slices.Index(logLevels, appLogLevel)
+	appLevelIndex := slices.Index(logLevels, appLogLevel)
+	currentLevelIndex := slices.Index(logLevels, currentLogLevel)
+
+	return appLevelIndex >= 0 && currentLevelIndex >= appLevelIndex
 }

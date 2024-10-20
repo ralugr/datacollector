@@ -11,14 +11,18 @@ import (
 )
 
 func main() {
-	driver := file.NewWriter("log_json.txt")
+	driver, err := file.NewWriter("log_json.txt")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 	defer driver.Close()
 	driver.SetEncoding("json")
 
 	app, err := app.NewDataCollector(
 		driver,
-		config.ConfigAppName("Example"),
-		config.ConfigLogLevel(log.DebugLevel),
+		config.AppName("Example"),
+		config.LogLevel(log.DebugLevel),
 	)
 	if err != nil {
 		fmt.Println(err)

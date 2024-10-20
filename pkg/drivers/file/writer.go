@@ -23,28 +23,31 @@ type Writer struct {
 	encoding    string
 	file        *os.File
 	fileName    string
-	currentSize int64 // why
+	currentSize int64
 	buffer      *bufio.Writer
 	mu          sync.Mutex
 }
 
-func NewWriter(fileName string) *Writer {
+func NewWriter(fileName string) (*Writer, error) {
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error opening file %v: %v\n", fileName, err)
-		return nil
+		return nil, fmt.Errorf("Error opening file %v: %v\n", fileName, err)
+	}
+
+	stat, err := file.Stat()
+	if err != nil {
+		return nil, fmt.Errorf("Error getting file info for %v: %w", fileName, err)
 	}
 
 	return &Writer{
 		encoding:    PlainEncoding,
 		file:        file,
 		fileName:    fileName,
-		currentSize: 0,
+		currentSize: stat.Size(),
 		buffer:      bufio.NewWriter(file),
-	}
+	}, nil
 }
 
-// Close method closes the file
 func (w *Writer) Close() {
 	w.buffer.Flush()
 	w.file.Close()

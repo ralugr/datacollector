@@ -23,8 +23,8 @@ func main() {
 	driver := &CustomDriver{}
 	app, err := app.NewDataCollector(
 		driver,
-		config.ConfigAppName("Custom Driver Example"),
-		config.ConfigLogLevel(log.DebugLevel),
+		config.AppName("Custom Driver Example"),
+		config.LogLevel(log.DebugLevel),
 	)
 	if err != nil {
 		fmt.Println(err)

@@ -30,3 +30,9 @@ Over time, the log file could grow very large, which could lead to issues with s
 Efficient Encoding: By supporting both plain text and JSON encodings.
 Leveled Logging: By checking log levels before processing entries.
 Buffered I/O: By using a buffered writer for file operations.
+
+Further improvements:
+- add more documentation.
+- run in a container with all the dependencies installed.
+- improve error handling (return errors and handle them at a higher level)
+- 

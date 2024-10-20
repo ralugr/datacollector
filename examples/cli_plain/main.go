@@ -16,8 +16,8 @@ func main() {
 
 	app, err := app.NewDataCollector(
 		driver,
-		config.ConfigAppName("CLI Plain"),
-		config.ConfigLogLevel(log.DebugLevel),
+		config.AppName("CLI Plain"),
+		config.LogLevel(log.DebugLevel),
 	)
 	if err != nil {
 		fmt.Println(err)

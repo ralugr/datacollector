@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
+	"os"
 	"sync"
 	"time"
 
@@ -21,8 +22,16 @@ type txn struct {
 }
 
 func newPrivateTxn(driver Driver, cfg config.Config, attributes ...log.Attrb) *txn {
+	id, err := generateID()
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to generate transaction ID due to error: %v. Please try again.\n", err)
+		return &txn{
+			active: false,
+		}
+	}
 	return &txn{
-		id:     generateID(),
+		id:     id,
 		drv:    driver,
 		config: cfg,
 		attr:   attributes,
@@ -51,7 +60,6 @@ func (t *txn) log(level log.Level, msg string, attributes ...log.Attrb) {
 	}
 
 	if !log.IsValid(t.config.LogLevel, level) {
-		fmt.Printf("Transaction log not valid %v, %v\n", t.config.LogLevel, level)
 		return
 	}
 
@@ -67,14 +75,14 @@ func (t *txn) log(level log.Level, msg string, attributes ...log.Attrb) {
 	t.drv.RecordLog(data)
 }
 
-func generateID() string {
+func generateID() (string, error) {
 	timestamp := time.Now().UnixNano()
 
 	randomBytes := make([]byte, 4)
 	_, err := rand.Read(randomBytes)
 	if err != nil {
-		panic(err)
+		return "", fmt.Errorf("unable to generate transaction id: %v", err)
 	}
 
-	return fmt.Sprintf("%x%s", timestamp, hex.EncodeToString(randomBytes))
+	return fmt.Sprintf("%x%s", timestamp, hex.EncodeToString(randomBytes)), nil
 }
